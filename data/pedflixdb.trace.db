@@ -100,3 +100,11 @@ The connection was not closed by the application and is garbage collected [90018
 	at org.h2.message.DbException.getJdbcSQLException(DbException.java:690)
 	at org.h2.message.DbException.getJdbcSQLException(DbException.java:489)
 	... 94 more
+2025-11-15 15:58:44.089554+01:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Error de Sintaxis en sentencia SQL "[*]USUARIO_ID"; se esperaba "UPDATE"
+Syntax error in SQL statement "[*]USUARIO_ID"; expected "UPDATE"; SQL statement:
+USUARIO_ID [42001-232]
+2025-11-15 15:58:46.482008+01:00 jdbc[13]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Error de Sintaxis en sentencia SQL "[*]USUARIO_ID ROL_ID"; se esperaba "UPDATE"
+Syntax error in SQL statement "[*]USUARIO_ID ROL_ID"; expected "UPDATE"; SQL statement:
+USUARIO_ID ROL_ID [42001-232]

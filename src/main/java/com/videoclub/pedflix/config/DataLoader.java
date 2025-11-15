@@ -6,8 +6,8 @@ import com.videoclub.pedflix.model.Rol;
 import com.videoclub.pedflix.model.Usuario;
 import com.videoclub.pedflix.repository.RolRepository;
 import com.videoclub.pedflix.repository.UsuarioRepository;
-import com.videoclub.pedflix.security.TripleHash;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.Set;
@@ -18,15 +18,18 @@ public class DataLoader implements CommandLineRunner {
     private final PeliculaRepository peliculaRepository;
     private final UsuarioRepository usuarioRepository;
     private final RolRepository rolRepository;
+    private final PasswordEncoder passwordEncoder;
 
     public DataLoader(
             PeliculaRepository peliculaRepository,
             UsuarioRepository usuarioRepository,
-            RolRepository rolRepository
+            RolRepository rolRepository,
+            PasswordEncoder passwordEncoder
     ) {
         this.peliculaRepository = peliculaRepository;
         this.usuarioRepository = usuarioRepository;
         this.rolRepository = rolRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -78,12 +81,12 @@ public class DataLoader implements CommandLineRunner {
 
             Usuario admin = new Usuario();
             admin.setUsername("admin");
-            admin.setPassword(TripleHash.hash("admin123")); // triple hash
+            admin.setPassword(passwordEncoder.encode("admin1234"));
             admin.setRoles(Set.of(rolAdmin));
 
             usuarioRepository.save(admin);
 
-            System.out.println("Usuario ADMIN creado: admin / admin123");
+            System.out.println("Usuario ADMIN creado: admin / admin1234");
         }
     }
 }
