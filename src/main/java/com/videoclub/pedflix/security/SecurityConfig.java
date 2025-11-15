@@ -8,12 +8,14 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class SecurityConfig {
 
-    // Configuración temporal SIN seguridad para poder trabajar y probar la app
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+
         http
                 .csrf(csrf -> csrf.disable())
+                .headers(headers -> headers.frameOptions(frame -> frame.disable())) // <- NECESARIO PARA H2
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/h2-console/**").permitAll()
                         .anyRequest().permitAll()
                 )
                 .formLogin(login -> login.disable())
@@ -22,3 +24,4 @@ public class SecurityConfig {
         return http.build();
     }
 }
+

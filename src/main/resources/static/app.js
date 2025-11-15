@@ -1,4 +1,4 @@
-fetch("https://localhost:8443/peliculas")
+fetch("http://localhost:9090/peliculas")
     .then(r => r.json())
     .then(data => {
 

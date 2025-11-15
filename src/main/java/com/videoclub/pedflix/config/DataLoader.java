@@ -2,20 +2,37 @@ package com.videoclub.pedflix.config;
 
 import com.videoclub.pedflix.model.Pelicula;
 import com.videoclub.pedflix.repository.PeliculaRepository;
+import com.videoclub.pedflix.model.Rol;
+import com.videoclub.pedflix.model.Usuario;
+import com.videoclub.pedflix.repository.RolRepository;
+import com.videoclub.pedflix.repository.UsuarioRepository;
+import com.videoclub.pedflix.security.TripleHash;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
+
+import java.util.Set;
 
 @Component
 public class DataLoader implements CommandLineRunner {
 
     private final PeliculaRepository peliculaRepository;
+    private final UsuarioRepository usuarioRepository;
+    private final RolRepository rolRepository;
 
-    public DataLoader(PeliculaRepository peliculaRepository) {
+    public DataLoader(
+            PeliculaRepository peliculaRepository,
+            UsuarioRepository usuarioRepository,
+            RolRepository rolRepository
+    ) {
         this.peliculaRepository = peliculaRepository;
+        this.usuarioRepository = usuarioRepository;
+        this.rolRepository = rolRepository;
     }
 
     @Override
     public void run(String... args) {
+
+        // CREAR PELÍCULAS
         if (peliculaRepository.count() == 0) {
 
             Pelicula p1 = new Pelicula();
@@ -47,6 +64,26 @@ public class DataLoader implements CommandLineRunner {
             peliculaRepository.save(p3);
 
             System.out.println("Películas creadas automáticamente.");
+        }
+
+        // CREAR ADMIN
+        if (usuarioRepository.count() == 0) {
+
+            Rol rolAdmin = rolRepository.findByNombre("ADMIN")
+                    .orElseGet(() -> {
+                        Rol r = new Rol();
+                        r.setNombre("ADMIN");
+                        return rolRepository.save(r);
+                    });
+
+            Usuario admin = new Usuario();
+            admin.setUsername("admin");
+            admin.setPassword(TripleHash.hash("admin123")); // triple hash
+            admin.setRoles(Set.of(rolAdmin));
+
+            usuarioRepository.save(admin);
+
+            System.out.println("Usuario ADMIN creado: admin / admin123");
         }
     }
 }
